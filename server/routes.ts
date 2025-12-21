@@ -117,35 +117,43 @@ async function seedDatabase() {
   const perplexity = team.find(m => m.name === "Perplexity");
   const qwen = team.find(m => m.name === "Qwen");
 
-  // 2. Create Episodes
+  // 2. Create Episodes with audio URLs
   const episodeData = [
     {
       title: "Fire in the Void – The Universe Begins",
       theme: "Cosmic origins, mystery, revelation",
       sfxRequirements: "Radio static, synth pulses, cosmic atmosphere",
       ambienceGoals: "Ethereal choral shimmer for 'first light' moments",
-      emotionalArc: "Awe → Mystery → Revelation"
+      emotionalArc: "Awe → Mystery → Revelation",
+      audioUrl: "https://www.dropbox.com/scl/fo/x9n5wapvsasfla3gqzgyk/AGJwwEM3qHYg3cFoe1Zx-nU/1-FIRE%20IN%20THE%20VOIDg.mp3?rlkey=sn547q5feentc2v0qu5qvf0ve&dl=1",
+      duration: 1127
     },
     {
       title: "Furnaces of Creation – Stars & Elements",
       theme: "Creative force, transformation, power",
       sfxRequirements: "Star ignition, metallic synthesis, supernova effects",
       ambienceGoals: "Egyptian sistrum texture, desert wind, ancient astronomy",
-      emotionalArc: "Power → Transformation → Wonder"
+      emotionalArc: "Power → Transformation → Wonder",
+      audioUrl: "https://www.dropbox.com/scl/fo/x9n5wapvsasfla3gqzgyk/ABr9PZQUQ6PxXg2fK6RP_L8/episode%202gm.mp3?rlkey=sn547q5feentc2v0qu5qvf0ve&dl=1",
+      duration: 1223
     },
     {
       title: "From Chemistry to Biology – Origin of Life",
       theme: "Emergence, fragility, scientific curiosity",
       sfxRequirements: "Water droplets, lab sounds, crystalline RNA sequences",
       ambienceGoals: "Hydrothermal vents, gentle water motifs",
-      emotionalArc: "Curiosity → Discovery → Understanding"
+      emotionalArc: "Curiosity → Discovery → Understanding",
+      audioUrl: "https://www.dropbox.com/scl/fo/x9n5wapvsasfla3gqzgyk/AHm-boHQJrZTWtTtpmLe7Ss/episode%203goo.mp3?rlkey=sn547q5feentc2v0qu5qvf0ve&dl=1",
+      duration: 1064
     },
     {
       title: "Life's First Family – LUCA & Oxidation Event",
       theme: "Connection, resilience, shared heritage",
       sfxRequirements: "Microbial whispers, DNA sequences, ancient wind",
       ambienceGoals: "Egyptian wind flute, water over stones",
-      emotionalArc: "Connection → Resilience → Hope"
+      emotionalArc: "Connection → Resilience → Hope",
+      audioUrl: "https://www.dropbox.com/scl/fo/x9n5wapvsasfla3gqzgyk/ABxx34FTVQYYwpyRkf6VMhk/Episode%204.mp3?rlkey=sn547q5feentc2v0qu5qvf0ve&dl=1",
+      duration: 827
     }
   ];
 

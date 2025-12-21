@@ -12,6 +12,8 @@ export const episodes = pgTable("episodes", {
   sfxRequirements: text("sfx_requirements"),
   ambienceGoals: text("ambience_goals"),
   emotionalArc: text("emotional_arc"),
+  audioUrl: text("audio_url"),
+  duration: integer("duration"), // in seconds
   status: text("status", { enum: ["planning", "in_production", "review", "completed"] }).default("planning").notNull(),
   createdAt: timestamp("created_at").defaultNow(),
 });
@@ -107,4 +109,9 @@ export type DashboardStats = {
   completedEpisodes: number;
   activeTasks: number;
   teamSize: number;
+};
+
+export type EpisodeWithStats = Episode & {
+  taskCount: number;
+  completedTaskCount: number;
 };
