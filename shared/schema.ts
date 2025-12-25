@@ -48,6 +48,19 @@ export const productionAssets = pgTable("production_assets", {
   createdAt: timestamp("created_at").defaultNow(),
 });
 
+export const dailyBroadcasts = pgTable("daily_broadcasts", {
+  id: serial("id").primaryKey(),
+  title: text("title").notNull(),
+  audioUrl: text("audio_url").notNull(),
+  type: text("type").notNull(), // e.g., "Tawasol", "Through Time"
+  order: integer("order").notNull(),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+export const insertDailyBroadcastSchema = createInsertSchema(dailyBroadcasts).omit({ id: true, createdAt: true });
+export type DailyBroadcast = typeof dailyBroadcasts.$inferSelect;
+export type InsertDailyBroadcast = z.infer<typeof insertDailyBroadcastSchema>;
+
 // === RELATIONS ===
 
 export const episodesRelations = relations(episodes, ({ many }) => ({

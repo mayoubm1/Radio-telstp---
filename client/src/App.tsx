@@ -12,6 +12,7 @@ import Episodes from "@/pages/Episodes";
 import EpisodeDetails from "@/pages/EpisodeDetails";
 import Team from "@/pages/Team";
 import Assets from "@/pages/Assets";
+import DailyBroadcasts from "@/pages/DailyBroadcasts";
 
 function Router() {
   return (
@@ -24,6 +25,7 @@ function Router() {
           <Route path="/episodes/:id" component={EpisodeDetails} />
           <Route path="/team" component={Team} />
           <Route path="/assets" component={Assets} />
+          <Route path="/broadcasts" component={DailyBroadcasts} />
           <Route component={NotFound} />
         </Switch>
       </main>

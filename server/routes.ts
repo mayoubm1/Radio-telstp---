@@ -51,6 +51,11 @@ export async function registerRoutes(
     res.json(members);
   });
 
+  app.get("/api/broadcasts", async (_req, res) => {
+    const broadcasts = await storage.getDailyBroadcasts();
+    res.json(broadcasts);
+  });
+
   app.post(api.team.create.path, async (req, res) => {
     const input = api.team.create.input.parse(req.body);
     const member = await storage.createTeamMember(input);
