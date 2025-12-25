@@ -2,7 +2,7 @@ import { useEpisode } from "@/hooks/use-episodes";
 import { useCreateTask, useUpdateTask } from "@/hooks/use-tasks";
 import { useTeam } from "@/hooks/use-team";
 import { useRoute, Link } from "wouter";
-import { Loader2, ArrowLeft, Plus, Calendar, User, CheckCircle2, Circle, Clock } from "lucide-react";
+import { Loader2, ArrowLeft, Plus, Calendar, User, CheckCircle2, Circle, Clock, Wand2, Music2, Play, Pause } from "lucide-react";
 import { StatusBadge } from "@/components/StatusBadge";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
@@ -13,7 +13,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { insertTaskSchema } from "@shared/schema";
 import { z } from "zod";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { motion } from "framer-motion";
 import clsx from "clsx";
 
@@ -22,6 +22,19 @@ export default function EpisodeDetails() {
   const id = params ? parseInt(params.id) : 0;
   const { data: episode, isLoading } = useEpisode(id);
   const [open, setOpen] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const audioRef = useRef<HTMLAudioElement>(null);
+
+  const togglePlay = () => {
+    if (audioRef.current) {
+      if (isPlaying) {
+        audioRef.current.pause();
+      } else {
+        audioRef.current.play();
+      }
+      setIsPlaying(!isPlaying);
+    }
+  };
 
   if (isLoading) {
     return (
@@ -50,7 +63,7 @@ export default function EpisodeDetails() {
       </Link>
 
       <div className="flex flex-col md:flex-row justify-between items-start gap-8 border-b border-white/10 pb-8">
-        <div>
+        <div className="flex-1">
           <div className="flex items-center gap-4 mb-3">
             <span className="text-xs font-mono text-primary bg-primary/10 px-2 py-1 rounded border border-primary/20">
               EPISODE 0{episode.id}
@@ -59,6 +72,28 @@ export default function EpisodeDetails() {
           </div>
           <h1 className="text-4xl font-display font-bold text-white mb-3">{episode.title}</h1>
           <p className="text-xl text-muted-foreground max-w-2xl">{episode.theme}</p>
+          
+          {episode.audioUrl && (
+            <div className="mt-6 flex items-center gap-4">
+              <audio 
+                ref={audioRef} 
+                src={episode.audioUrl} 
+                onEnded={() => setIsPlaying(false)}
+                className="hidden"
+              />
+              <Button 
+                onClick={togglePlay}
+                className="bg-primary hover:bg-primary/90 text-primary-foreground"
+              >
+                {isPlaying ? <Pause className="w-4 h-4 mr-2" /> : <Play className="w-4 h-4 mr-2" />}
+                {isPlaying ? "PAUSE PREVIEW" : "PLAY PREVIEW"}
+              </Button>
+              <div className="text-sm font-mono text-muted-foreground">
+                <Clock className="w-3 h-3 inline mr-1" />
+                {Math.floor((episode.duration || 0) / 60)}:{(episode.duration || 0) % 60 < 10 ? '0' : ''}{(episode.duration || 0) % 60}
+              </div>
+            </div>
+          )}
         </div>
 
         <div className="flex gap-4">

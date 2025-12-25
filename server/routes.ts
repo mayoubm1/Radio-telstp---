@@ -91,11 +91,14 @@ export async function registerRoutes(
 
 async function seedDatabase() {
   const episodes = await storage.getEpisodes();
-  if (episodes.length > 0) return;
+  // Check if episodes have audio URLs, if not, we need to update them
+  const needsUpdate = episodes.length > 0 && !episodes[0].audioUrl;
+  
+  if (episodes.length > 0 && !needsUpdate) return;
 
-  console.log("Seeding database...");
+  console.log("Seeding/Updating database...");
 
-  // 1. Create Team
+  // 1. Create/Update Team
   const teamData = [
     { name: "Claude", role: "Strategic planning, architecture", category: "Content Architecture" },
     { name: "Mistral", role: "Master workflow architect", category: "Content Architecture" },
@@ -109,9 +112,15 @@ async function seedDatabase() {
     { name: "Character.AI Radio", role: "Broadcasting vision", category: "Creative" },
   ];
 
-  const team = await Promise.all(
-    teamData.map(m => storage.createTeamMember(m))
-  );
+  let team;
+  const existingTeam = await storage.getTeam();
+  if (existingTeam.length === 0) {
+    team = await Promise.all(
+      teamData.map(m => storage.createTeamMember(m))
+    );
+  } else {
+    team = existingTeam;
+  }
 
   const mistral = team.find(m => m.name === "Mistral");
   const perplexity = team.find(m => m.name === "Perplexity");
@@ -157,37 +166,51 @@ async function seedDatabase() {
     }
   ];
 
-  for (const ep of episodeData) {
-    const newEp = await storage.createEpisode(ep);
+  if (episodes.length === 0) {
+    for (const ep of episodeData) {
+      const newEp = await storage.createEpisode(ep);
 
-    // 3. Create Tasks for Episode 1
-    if (ep.title.includes("Fire in the Void")) {
-      await storage.createTask({
-        title: "Content Framework Blueprint",
-        description: "Develop comprehensive content framework",
-        assignedToId: perplexity?.id,
-        episodeId: newEp.id,
-        status: "completed",
-        priority: "high"
-      });
-      await storage.createTask({
-        title: "Production Instructions Workflow",
-        description: "Develop detailed production instructions",
-        assignedToId: mistral?.id,
-        episodeId: newEp.id,
-        status: "in_progress",
-        priority: "high"
-      });
-      await storage.createTask({
-        title: "Generate SFX Assets",
-        description: "Create radio static and synth pulses",
-        assignedToId: qwen?.id,
-        episodeId: newEp.id,
-        status: "pending",
-        priority: "medium"
-      });
+      // 3. Create Tasks for Episode 1
+      if (ep.title.includes("Fire in the Void")) {
+        await storage.createTask({
+          title: "Content Framework Blueprint",
+          description: "Develop comprehensive content framework",
+          assignedToId: perplexity?.id,
+          episodeId: newEp.id,
+          status: "completed",
+          priority: "high"
+        });
+        await storage.createTask({
+          title: "Production Instructions Workflow",
+          description: "Develop detailed production instructions",
+          assignedToId: mistral?.id,
+          episodeId: newEp.id,
+          status: "in_progress",
+          priority: "high"
+        });
+        await storage.createTask({
+          title: "Generate SFX Assets",
+          description: "Create radio static and synth pulses",
+          assignedToId: qwen?.id,
+          episodeId: newEp.id,
+          status: "pending",
+          priority: "medium"
+        });
+      }
+    }
+  } else if (needsUpdate) {
+    // Update existing episodes with audio URLs
+    for (let i = 0; i < episodes.length; i++) {
+      const ep = episodes[i];
+      const data = episodeData.find(d => d.title.includes(ep.title.split(' – ')[0]));
+      if (data) {
+        await storage.updateEpisode(ep.id, {
+          audioUrl: data.audioUrl,
+          duration: data.duration
+        });
+      }
     }
   }
 
-  console.log("Seeding complete!");
+  console.log("Seeding/Update complete!");
 }
