@@ -48,6 +48,8 @@ export const productionAssets = pgTable("production_assets", {
   createdAt: timestamp("created_at").defaultNow(),
 });
 
+export * from "./models/chat";
+
 export const dailyBroadcasts = pgTable("daily_broadcasts", {
   id: serial("id").primaryKey(),
   title: text("title").notNull(),

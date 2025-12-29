@@ -56,7 +56,34 @@ export async function registerRoutes(
     res.json(broadcasts);
   });
 
-  app.post(api.team.create.path, async (req, res) => {
+  app.get("/api/broadcasts", async (_req, res) => {
+    const broadcasts = await storage.getDailyBroadcasts();
+    res.json(broadcasts);
+  });
+
+  app.post("/api/translate", async (req, res) => {
+    try {
+      const { text, targetLanguage = "ar" } = req.body;
+      const response = await fetch("https://api.mistral.ai/v1/chat/completions", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${process.env.MISTRAL_API_KEY}`
+        },
+        body: JSON.stringify({
+          model: "mistral-tiny",
+          messages: [{ role: "user", content: `Translate the following text to ${targetLanguage}: ${text}` }]
+        })
+      });
+      const data = await response.json();
+      res.json({ translation: data?.choices?.[0]?.message?.content || "Translation unavailable" });
+    } catch (error) {
+      console.error("Translation error:", error);
+      res.status(500).json({ error: "Translation failed" });
+    }
+  });
+
+  app.post("/api/team", async (req, res) => {
     const input = api.team.create.input.parse(req.body);
     const member = await storage.createTeamMember(input);
     res.status(201).json(member);

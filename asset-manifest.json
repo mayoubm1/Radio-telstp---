@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/telstpsoundcore/static/css/main.0512c44b.css",
+    "main.js": "/telstpsoundcore/static/js/main.63b7cef9.js",
+    "index.html": "/telstpsoundcore/index.html",
+    "main.0512c44b.css.map": "/telstpsoundcore/static/css/main.0512c44b.css.map",
+    "main.63b7cef9.js.map": "/telstpsoundcore/static/js/main.63b7cef9.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.0512c44b.css",
+    "static/js/main.63b7cef9.js"
+  ]
+}
