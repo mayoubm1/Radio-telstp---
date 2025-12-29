@@ -41,6 +41,8 @@ export default function DailyBroadcasts() {
 
 function BroadcastCard({ broadcast, index }: { broadcast: any, index: number }) {
   const [isPlaying, setIsPlaying] = useState(false);
+  const [translation, setTranslation] = useState<string | null>(null);
+  const [isTranslating, setIsTranslating] = useState(false);
   const audioRef = useRef<HTMLAudioElement>(null);
 
   const togglePlay = () => {
@@ -51,6 +53,23 @@ function BroadcastCard({ broadcast, index }: { broadcast: any, index: number }) 
         audioRef.current.play();
       }
       setIsPlaying(!isPlaying);
+    }
+  };
+
+  const handleTranslate = async () => {
+    setIsTranslating(true);
+    try {
+      const res = await fetch("/api/translate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ text: broadcast.title })
+      });
+      const data = await res.json();
+      setTranslation(data.translation);
+    } catch (error) {
+      console.error("Translation failed", error);
+    } finally {
+      setIsTranslating(false);
     }
   };
 
@@ -68,10 +87,15 @@ function BroadcastCard({ broadcast, index }: { broadcast: any, index: number }) 
             </span>
             <Music className="w-4 h-4 text-muted-foreground" />
           </div>
-          <CardTitle className="text-lg font-display mt-2">{broadcast.title}</CardTitle>
+          <CardTitle className="text-lg font-display mt-2">
+            {broadcast.title}
+            {translation && (
+              <p className="text-sm text-primary mt-1 font-sans">{translation}</p>
+            )}
+          </CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="mt-4">
+          <div className="mt-4 space-y-3">
             <audio 
               ref={audioRef} 
               src={broadcast.audioUrl} 
@@ -85,6 +109,16 @@ function BroadcastCard({ broadcast, index }: { broadcast: any, index: number }) 
             >
               {isPlaying ? <Pause className="w-4 h-4 mr-2" /> : <Play className="w-4 h-4 mr-2" />}
               {isPlaying ? "PAUSE" : "PLAY BROADCAST"}
+            </Button>
+            <Button 
+              onClick={handleTranslate}
+              variant="outline"
+              size="sm"
+              className="w-full text-xs"
+              disabled={isTranslating || !!translation}
+            >
+              {isTranslating ? <Loader2 className="w-3 h-3 animate-spin mr-2" /> : null}
+              {translation ? "TRANSLATED" : "VIEW ARABIC TRANSLATION"}
             </Button>
           </div>
         </CardContent>
