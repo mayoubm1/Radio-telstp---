@@ -6,6 +6,7 @@ const navItems = [
   { href: "/", label: "Command Center", icon: LayoutDashboard },
   { href: "/episodes", label: "Episodes", icon: Film },
   { href: "/broadcasts", label: "Daily Broadcasts", icon: Radio },
+  { href: "/ideas", label: "Episode Ideas", icon: Activity },
   { href: "/team", label: "Team", icon: Users },
   { href: "/assets", label: "Assets", icon: Database },
 ];

@@ -1,11 +1,12 @@
 import { db } from "./db";
 import { 
-  episodes, teamMembers, tasks, productionAssets, dailyBroadcasts,
+  episodes, teamMembers, tasks, productionAssets, dailyBroadcasts, episodeIdeas,
   type Episode, type InsertEpisode,
   type TeamMember, type InsertTeamMember,
   type Task, type InsertTask,
   type ProductionAsset, type InsertProductionAsset,
-  type DailyBroadcast, type InsertDailyBroadcast
+  type DailyBroadcast, type InsertDailyBroadcast,
+  type EpisodeIdea, type InsertEpisodeIdea
 } from "@shared/schema";
 import { eq, sql } from "drizzle-orm";
 
@@ -15,6 +16,10 @@ export interface IStorage {
   getEpisode(id: number): Promise<Episode | undefined>;
   createEpisode(episode: InsertEpisode): Promise<Episode>;
   updateEpisode(id: number, updates: Partial<InsertEpisode>): Promise<Episode>;
+
+  // Episode Ideas
+  getEpisodeIdeas(): Promise<EpisodeIdea[]>;
+  createEpisodeIdea(idea: InsertEpisodeIdea): Promise<EpisodeIdea>;
 
   // Daily Broadcasts
   getDailyBroadcasts(): Promise<DailyBroadcast[]>;
@@ -64,6 +69,15 @@ export class DatabaseStorage implements IStorage {
       .where(eq(episodes.id, id))
       .returning();
     return updated;
+  }
+
+  async getEpisodeIdeas(): Promise<EpisodeIdea[]> {
+    return await db.select().from(episodeIdeas).orderBy(sql`${episodeIdeas.createdAt} desc`);
+  }
+
+  async createEpisodeIdea(idea: InsertEpisodeIdea): Promise<EpisodeIdea> {
+    const [newIdea] = await db.insert(episodeIdeas).values(idea).returning();
+    return newIdea;
   }
 
   async getDailyBroadcasts(): Promise<DailyBroadcast[]> {

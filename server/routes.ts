@@ -44,6 +44,14 @@ export async function registerRoutes(
     const episode = await storage.updateEpisode(id, input);
     res.json(episode);
   });
+  app.post("/api/episode-ideas", async (req, res) => {
+    try {
+      const idea = await storage.createEpisodeIdea(req.body);
+      res.status(201).json(idea);
+    } catch (error) {
+      res.status(500).json({ error: "Failed to submit idea" });
+    }
+  });
 
   // Team
   app.get(api.team.list.path, async (req, res) => {

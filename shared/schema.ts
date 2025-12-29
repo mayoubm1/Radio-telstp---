@@ -63,6 +63,19 @@ export const insertDailyBroadcastSchema = createInsertSchema(dailyBroadcasts).om
 export type DailyBroadcast = typeof dailyBroadcasts.$inferSelect;
 export type InsertDailyBroadcast = z.infer<typeof insertDailyBroadcastSchema>;
 
+export const episodeIdeas = pgTable("episode_ideas", {
+  id: serial("id").primaryKey(),
+  title: text("title").notNull(),
+  description: text("description").notNull(),
+  suggestedBy: text("suggested_by").notNull(),
+  status: text("status").default("pending").notNull(),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+export const insertEpisodeIdeaSchema = createInsertSchema(episodeIdeas).omit({ id: true, createdAt: true });
+export type EpisodeIdea = typeof episodeIdeas.$inferSelect;
+export type InsertEpisodeIdea = z.infer<typeof insertEpisodeIdeaSchema>;
+
 // === RELATIONS ===
 
 export const episodesRelations = relations(episodes, ({ many }) => ({
