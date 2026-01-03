@@ -46,3 +46,6 @@ integrations = ["javascript_openrouter_ai_integrations:2.0.0"]
 [userenv.shared]
 MISTRAL_API_KEY = "efe4a4276b6d3c000bda2515028eaf551c55567d"
 DEEPGRAM_API_KEY = "efe4a4276b6d3c000bda2515028eaf551c55567d"
+
+[userenv.production]
+SUPABASE_DATABASE_URL = "sb_secret_O1UUo4Is2t4GC6ykuly33A_1jpdWvnt"
