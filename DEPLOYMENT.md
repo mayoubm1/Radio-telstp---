@@ -38,5 +38,16 @@ The project already includes a `vercel.json` file which handles:
 4. Add the environment variables listed in Step 2.
 5. Click "Deploy".
 
-## 6. Sound Core Integration
-The `sound-core` repository contents have been merged into the project. The production logic for SFX and music scheduling is now available within the codebase for the build process to include.
+## 7. Supabase Database Schema
+The file `SUPABASE_SCHEMA.sql` has been generated for you. 
+1. Go to your Supabase Dashboard.
+2. Open the **SQL Editor**.
+3. Create a **New Query**.
+4. Paste the contents of `SUPABASE_SCHEMA.sql` and run it to set up your tables.
+
+## 8. GitHub Push Instructions
+1. Initialize git if not already done: `git init`
+2. Add all files: `git add .`
+3. Commit: `git commit -m "Initial commit for deployment"`
+4. Add your remote: `git remote add origin https://github.com/yourusername/your-repo.git`
+5. Push: `git push -u origin main`
