@@ -46,8 +46,9 @@ The file `SUPABASE_SCHEMA.sql` has been generated for you.
 4. Paste the contents of `SUPABASE_SCHEMA.sql` and run it to set up your tables.
 
 ## 8. GitHub Push Instructions
-1. Initialize git if not already done: `git init`
-2. Add all files: `git add .`
-3. Commit: `git commit -m "Initial commit for deployment"`
-4. Add your remote: `git remote add origin https://github.com/yourusername/your-repo.git`
-5. Push: `git push -u origin main`
+Detailed instructions can be found in `GITHUB_SETUP.md`. In summary:
+1. `git init` (if not already done)
+2. `git add .`
+3. `git commit -m "Initial commit"`
+4. `git remote add origin YOUR_REPO_URL`
+5. `git push -u origin main`
