@@ -163,6 +163,10 @@ export class DatabaseStorage implements IStorage {
       teamSize: Number(teamStats?.total || 0)
     };
   }
+
+  async getTeam(): Promise<TeamMember[]> {
+    return await db.select().from(teamMembers);
+  }
 }
 
 export const storage = new DatabaseStorage();

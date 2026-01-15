@@ -4,6 +4,7 @@ import { useState, useRef } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
+import { AgoraBroadcast } from "@/components/AgoraBroadcast";
 
 export default function DailyBroadcasts() {
   const { data: broadcasts, isLoading } = useQuery<any[]>({
@@ -30,10 +31,16 @@ export default function DailyBroadcasts() {
         <p className="text-muted-foreground">The "Tawasol" series and other essential transmissions.</p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {broadcasts?.map((broadcast, index) => (
-          <BroadcastCard key={broadcast.id} broadcast={broadcast} index={index} />
-        ))}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+        <div className="lg:col-span-4">
+          <AgoraBroadcast appId="" channel="TELsTP-Radio" token="" />
+        </div>
+        
+        <div className="lg:col-span-8 grid grid-cols-1 md:grid-cols-2 gap-6">
+          {broadcasts?.map((broadcast, index) => (
+            <BroadcastCard key={broadcast.id} broadcast={broadcast} index={index} />
+          ))}
+        </div>
       </div>
     </div>
   );
