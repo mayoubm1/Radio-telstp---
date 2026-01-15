@@ -100,6 +100,13 @@ export const tasksRelations = relations(tasks, ({ one }) => ({
 
 // === BASE SCHEMAS ===
 
+export const agoraConfig = pgTable("agora_config", {
+  id: serial("id").primaryKey(),
+  appId: text("app_id").notNull(),
+  appCertificate: text("app_certificate").notNull(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
 export const insertEpisodeSchema = createInsertSchema(episodes).omit({ id: true, createdAt: true });
 export const insertTeamMemberSchema = createInsertSchema(teamMembers).omit({ id: true });
 export const insertTaskSchema = createInsertSchema(tasks).omit({ id: true, createdAt: true });
