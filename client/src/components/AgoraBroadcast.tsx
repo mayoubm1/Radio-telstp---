@@ -10,28 +10,42 @@ interface AgoraBroadcastProps {
   token: string;
 }
 
-export function AgoraBroadcast({ appId, channel, token }: AgoraBroadcastProps) {
+export function AgoraBroadcast({ channel }: { channel: string }) {
   const [joined, setJoined] = useState(false);
   const [micOn, setMicOn] = useState(true);
   const [videoOn, setVideoOn] = useState(true);
+  const [config, setConfig] = useState<{ appId: string; token: string } | null>(null);
   
   const clientRef = useRef<IAgoraRTCClient | null>(null);
   const localAudioTrackRef = useRef<IMicrophoneAudioTrack | null>(null);
   const localVideoTrackRef = useRef<ICameraVideoTrack | null>(null);
   const videoElementRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    clientRef.current = AgoraRTC.createClient({ mode: "live", codec: "vp8" });
-    return () => {
-      leaveChannel();
-    };
-  }, []);
+  const fetchToken = async () => {
+    try {
+      const res = await fetch("/api/agora/token", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ channelName: channel, role: "publisher" })
+      });
+      const data = await res.json();
+      if (data.token) {
+        setConfig(data);
+        return data;
+      }
+    } catch (error) {
+      console.error("Token fetch error:", error);
+    }
+    return null;
+  };
 
   const joinChannel = async () => {
-    if (!clientRef.current) return;
+    const currentConfig = config || await fetchToken();
+    if (!currentConfig || !clientRef.current) return;
+    
     try {
       await clientRef.current.setClientRole("host");
-      await clientRef.current.join(appId, channel, token || null);
+      await clientRef.current.join(currentConfig.appId, channel, currentConfig.token, 0);
       
       localAudioTrackRef.current = await AgoraRTC.createMicrophoneAudioTrack();
       localVideoTrackRef.current = await AgoraRTC.createCameraVideoTrack();

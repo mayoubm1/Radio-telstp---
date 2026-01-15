@@ -97,8 +97,6 @@ export async function registerRoutes(
   // Agora Token Generation
   app.post("/api/agora/token", async (req, res) => {
     const { channelName, role = "publisher" } = req.body;
-    // In a production app, we would fetch appId and appCertificate from DB
-    // For now, we expect them in env or provided by user
     const appId = process.env.AGORA_APP_ID;
     const appCertificate = process.env.AGORA_APP_CERTIFICATE;
 
@@ -106,10 +104,28 @@ export async function registerRoutes(
       return res.status(500).json({ error: "Agora credentials not configured" });
     }
 
-    // Since we can't easily import RtcTokenBuilder from the CJS package in this ESM setup
-    // without more complex config, we'll provide a placeholder or use a simpler method
-    // In real implementation, we'd use the agora-access-token library properly
-    res.json({ token: "TEMP_TOKEN_PLACEHOLDER", appId });
+    try {
+      const { RtcTokenBuilder, RtcRole } = await import("agora-access-token");
+      const expirationTimeInSeconds = 3600;
+      const currentTimestamp = Math.floor(Date.now() / 1000);
+      const privilegeExpiredTS = currentTimestamp + expirationTimeInSeconds;
+      
+      const agoraRole = role === "publisher" ? RtcRole.PUBLISHER : RtcRole.SUBSCRIBER;
+      
+      const token = RtcTokenBuilder.buildTokenWithUid(
+        appId,
+        appCertificate,
+        channelName,
+        0, // uid 0 lets Agora assign one
+        agoraRole,
+        privilegeExpiredTS
+      );
+      
+      res.json({ token, appId });
+    } catch (error) {
+      console.error("Token generation error:", error);
+      res.status(500).json({ error: "Failed to generate Agora token" });
+    }
   });
 
   app.post(api.tasks.create.path, async (req, res) => {

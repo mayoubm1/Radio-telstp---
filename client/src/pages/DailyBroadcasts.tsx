@@ -33,7 +33,7 @@ export default function DailyBroadcasts() {
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
         <div className="lg:col-span-4">
-          <AgoraBroadcast appId="" channel="TELsTP-Radio" token="" />
+          <AgoraBroadcast channel="TELsTP-Radio" />
         </div>
         
         <div className="lg:col-span-8 grid grid-cols-1 md:grid-cols-2 gap-6">
