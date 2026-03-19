@@ -47,8 +47,8 @@ integrations = ["javascript_openrouter_ai_integrations:2.0.0"]
 MISTRAL_API_KEY = "efe4a4276b6d3c000bda2515028eaf551c55567d"
 DEEPGRAM_API_KEY = "efe4a4276b6d3c000bda2515028eaf551c55567d"
 SUPABASE_URL = "https://vrfyjirddfdnwuffzqhb.supabase.co"
-SUPABASE_ANON_KEY = "sb_publishable_V5s7s99vtpwgNxv5t7PLFQ_utJpeOgr"
+SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZyZnlqaXJkZGZkbnd1ZmZ6cWhiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTk5MDYwNjMsImV4cCI6MjA3NTQ4MjA2M30.glgJwI2yIqUFG8ZtWJk2esxGdXw6nFp5eQ8aANbRAvE"
 DATABASE_URL_SUPABASE = "postgresql://postgres:Maayoubm235152!?@db.vrfyjirddfdnwuffzqhb.supabase.co:5432/postgres"
 
 [userenv.production]
-SUPABASE_DATABASE_URL = "sb_secret_O1UUo4Is2t4GC6ykuly33A_1jpdWvnt"
+SUPABASE_DATABASE_URL = "postgresql://postgres:Maayoubm235152!?@db.vrfyjirddfdnwuffzqhb.supabase.co:5432/postgres"
